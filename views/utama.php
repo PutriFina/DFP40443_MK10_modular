@@ -1,6 +1,6 @@
 <?php
 
-include "includes/products.php";
+include "includes/product.php";
 include "includes/header.php";
 include "includes/nav.php";
 
