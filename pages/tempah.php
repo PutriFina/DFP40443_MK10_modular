@@ -1,57 +1,36 @@
-<?php
-// Jangan panggil session_start() di sini kerana sudah ada di index.php
-include "data/produk.php";
-include "layout/header.php";
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nama_pelanggan = trim($_POST['nama_pelanggan'] ?? '');
-    $tempahan = $_POST['tempahan'] ?? [];
-
-    $no_invois = 'INV' . rand(1000, 9999);
-    $tarikh = date('d/m/Y');
-
-    $_SESSION['invois_data'] = [
-        'nama_pelanggan' => $nama_pelanggan,
-        'tempahan' => $tempahan,
-        'no_invois' => $no_invois,
-        'tarikh' => $tarikh
-    ];
-
-    header("Location: index.php?menu=invois");
-    exit();
-}
-?>
-
 <h1 class="page-title">Borang Tempahan</h1>
 
-<form method="POST">
+<?php if (isset($_GET['error'])): ?>
+<p style="color:red;">Sila pilih sekurang-kurangnya satu biskut.</p>
+<?php endif; ?>
 
-    <?php foreach($produk as $p): ?>
-        <h3><?= htmlspecialchars($p['nama']) ?></h3>
+<form method="POST" action="process_tempahan.php">
 
-        <?php foreach($p['harga'] as $saiz => $harga): ?>
-            <input
-                type="number"
-                name="tempahan[<?= $p['id'] ?>][<?= $saiz ?>]"
-                value="0"
-                min="0">
-            <?= ucwords(str_replace('_',' ',$saiz)) ?>
-            RM <?= number_format($harga,2) ?>
-            <br>
-        <?php endforeach; ?>
+<div class="product-grid">
+<?php foreach ($data as $produk): ?>
+<div class="product-card">
+    <img src="gambar/<?= $produk['gambar'] ?>" class="product-image">
+
+    <h3><?= $produk['nama'] ?></h3>
+
+    <?php foreach ($produk['harga'] as $saiz => $harga): ?>
+        <div class="product-option">
+            <span><?= $saiz ?> (RM <?= $harga ?>)</span>
+            <input type="number" name="tempahan[<?= $produk['id'] ?>][<?= $saiz ?>]"
+                   value="0" min="0" class="qty-input" data-price="<?= $harga ?>">
+        </div>
     <?php endforeach; ?>
 
-    <br>
+</div>
+<?php endforeach; ?>
+</div>
 
-    <input type="text"
-        name="nama_pelanggan"
-        placeholder="Nama"
-        required>
+<div class="checkout-card">
+    <h3>Jumlah: <span id="totalPrice">RM 0.00</span></h3>
 
-    <button type="submit">
-        Teruskan
-    </button>
+    <input type="text" name="nama_pelanggan" placeholder="Nama penuh" required>
+
+    <button type="submit" class="btn-teruskan">Teruskan</button>
+</div>
 
 </form>
-
-<?php include "layout/footer.php"; ?>

@@ -1,24 +1,21 @@
 <?php
-
 session_start();
+include "data_produk.php";
 
 $menu = $_GET['menu'] ?? 'utama';
 
-switch($menu){
+include "header.php";
 
-case "utama":
-include "pages/utama.php";
-break;
-
-case "tempah":
-include "pages/tempah.php";
-break;
-
-case "invois":
-include "pages/invois.php";
-break;
-
-default:
-echo "Menu tidak ditemui";
-
+switch ($menu) {
+    case 'tempah':
+        include "tempah.php";
+        break;
+    case 'invois':
+        include "invois.php";
+        break;
+    default:
+        include "utama.php";
 }
+
+include "footer.php";
+?>

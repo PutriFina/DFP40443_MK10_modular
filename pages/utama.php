@@ -1,21 +1,17 @@
-<?php
-include "data/produk.php";
-include "layout/header.php";
-?>
-
-<!-- Page Title -->
 <h1 class="page-title">Selamat Datang</h1>
 
-<!-- Gallery Container -->
 <div class="gallery-row">
-    <?php foreach($produk as $p): ?>
-        <img
-            src="gambar/<?= $p['gambar'] ?>"
-            alt="<?= $p['nama'] ?>"
-            class="gallery-thumb">
-    <?php endforeach; ?>
+<?php foreach ($data as $produk): ?>
+    <div class="gallery-item">
+        <img src="gambar/<?= $produk['gambar'] ?>" class="gallery-thumb">
+        <p><?= $produk['nama'] ?></p>
+    </div>
+<?php endforeach; ?>
 </div>
 
-<?php
-include "layout/footer.php";
-?>
+<div class="instructions-section">
+<h3>Cara Membuat Tempahan</h3>
+<p>
+Klik menu Tempah → isi kuantiti → masukkan nama → tekan Teruskan → cetak invois.
+</p>
+</div>
