@@ -1,42 +1,57 @@
 <?php
-if (!isset($_SESSION['invois_data'])) {
-    header("Location: index.php?menu=tempah");
-    exit;
-}
-$invois = $_SESSION['invois_data'];
+require_once __DIR__ . '/../function/invois.php';
+$invois = dapatkanInvois();
 ?>
 
-<h1 class="page-title">Invois</h1>
-
 <div class="invoice-box">
+    <h2>INVOIS TEMPAHAN</h2>
+    <div class="info">
+        <span class="label">No Invois:</span>
+        <?php echo htmlspecialchars($invois['invoice_no']); ?>
+    </div>
+    <div class="info">
+        <span class="label">Nama Pelanggan:</span>
+        <?php echo htmlspecialchars($invois['nama_pelanggan']); ?>
+    </div>
+    <div class="info">
+        <span class="label">Tarikh:</span>
+        <?php echo htmlspecialchars($invois['tarikh'] ?? date("d-m-Y")); ?>
+    </div>
 
-    <p>Nama: <?= $invois['nama_pelanggan'] ?></p>
-    <p>No: <?= $invois['no_invois'] ?></p>
-    <p>Tarikh: <?= $invois['tarikh'] ?></p>
-
+    <hr>
+    <h3>Senarai Tempahan:</h3>
     <table class="invoice-table">
-        <tr>
-            <th>Produk</th>
-            <th>Saiz</th>
-            <th>Harga</th>
-            <th>Qty</th>
-            <th>Jumlah</th>
-        </tr>
-
-        <?php foreach ($invois['items'] as $item): ?>
+        <thead>
             <tr>
-                <td><?= $item['nama_produk'] ?></td>
-                <td><?= $item['saiz'] ?></td>
-                <td><?= $item['harga_seunit'] ?></td>
-                <td><?= $item['kuantiti'] ?></td>
-                <td><?= $item['jumlah_harga'] ?></td>
+                <th>Nama Produk</th>
+                <th>Saiz</th>
+                <th>Harga (RM)</th>
+                <th>Kuantiti</th>
+                <th>Jumlah (RM)</th>
             </tr>
-        <?php endforeach; ?>
-
+        </thead>
+        <tbody>
+            <?php if (isset($invois['ordered_items']) && is_array($invois['ordered_items'])): ?>
+                <?php foreach ($invois['ordered_items'] as $item): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($item['nama'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($item['saiz'] ?? ''); ?></td>
+                        <td><?php echo number_format($item['harga'] ?? 0, 2); ?></td>
+                        <td><?php echo htmlspecialchars($item['kuantiti'] ?? 0); ?></td>
+                        <td><?php echo number_format($item['jumlah'] ?? 0, 2); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" style="text-align: right;"><strong>Jumlah Keseluruhan:</strong></td>
+                <td><strong>RM <?php echo number_format($invois['total'] ?? 0, 2); ?></strong></td>
+            </tr>
+        </tfoot>
     </table>
 
-    <h3>Total: RM <?= $invois['jumlah_besar'] ?></h3>
-
-    <button onclick="window.print()">Cetak</button>
-
+    <hr>
+    <p>Terima kasih kerana membuat tempahan di <strong>Biskut Klasik</strong> 🍪</p>
+    <a href="index.php?menu=tempah" class="btn">Buat Tempahan Baru</a>
 </div>

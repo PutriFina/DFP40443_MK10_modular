@@ -1,17 +1,13 @@
-<h1 class="page-title">Selamat Datang</h1>
+<?php include "data/produk.php"; ?>
 
+<h1 class="page-title">Selamat Datang</h1>
 <div class="gallery-row">
 <?php foreach ($data as $produk): ?>
-    <div class="gallery-item">
-        <img src="gambar/<?= $produk['gambar'] ?>" class="gallery-thumb">
-        <p><?= $produk['nama'] ?></p>
-    </div>
+    <img src="gambar/<?= htmlspecialchars($produk['gambar']) ?>" class="gallery-thumb" alt="<?= htmlspecialchars($produk['nama']) ?>">
 <?php endforeach; ?>
 </div>
 
 <div class="instructions-section">
-<h3>Cara Membuat Tempahan</h3>
-<p>
-Klik menu Tempah → isi kuantiti → masukkan nama → tekan Teruskan → cetak invois.
-</p>
+    <h3>Cara Membuat Tempahan</h3>
+    <p> Selamat datang ke Biskut Klasik! Untuk membuat tempahan, klik menu <a href="index.php?menu=tempah" class="instruction-link"><strong>Tempah</strong></a>, pilih kuantiti dan tekan <a href="index.php?menu=tempah" class="instruction-link"><strong>Teruskan</strong></a>. </p>
 </div>

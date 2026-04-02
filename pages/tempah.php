@@ -1,36 +1,43 @@
+<?php
+require_once __DIR__ . '/../function/tempah.php';
+prosesTempahan();
+include __DIR__ . '/../data/produk.php';
+
+$error_message = '';
+if (isset($_GET['error'])) {
+    switch ($_GET['error']) {
+        case 'no_items':
+            $error_message = 'Sila pilih sekurang-kurangnya satu item untuk ditempah.';
+            break;
+        case 'no_name':
+            $error_message = 'Sila masukkan nama penuh.';
+            break;
+    }
+}
+?>
+
 <h1 class="page-title">Borang Tempahan</h1>
 
-<?php if (isset($_GET['error'])): ?>
-<p style="color:red;">Sila pilih sekurang-kurangnya satu biskut.</p>
+<?php if ($error_message): ?>
+    <div class="error-message" style="color: red; text-align: center; margin-bottom: 20px;">
+        <?php echo htmlspecialchars($error_message); ?>
+    </div>
 <?php endif; ?>
 
-<form method="POST" action="process_tempahan.php">
-
-<div class="product-grid">
-<?php foreach ($data as $produk): ?>
-<div class="product-card">
-    <img src="gambar/<?= $produk['gambar'] ?>" class="product-image">
-
-    <h3><?= $produk['nama'] ?></h3>
-
-    <?php foreach ($produk['harga'] as $saiz => $harga): ?>
-        <div class="product-option">
-            <span><?= $saiz ?> (RM <?= $harga ?>)</span>
-            <input type="number" name="tempahan[<?= $produk['id'] ?>][<?= $saiz ?>]"
-                   value="0" min="0" class="qty-input" data-price="<?= $harga ?>">
+<form method="POST">
+    <div class="product-grid">
+        <?php foreach ($data as $produk): ?>
+            <?php include __DIR__ . '/../components/product-card.php'; ?>
+        <?php endforeach; ?>
+    </div>
+    
+    <div class="checkout-section">
+        <div class="total-display">
+            <span class="total-label"> Jumlah Harga: </span>
+            <span id="total-price" class="total-amount"> RM 0.00 </span>
         </div>
-    <?php endforeach; ?>
-
-</div>
-<?php endforeach; ?>
-</div>
-
-<div class="checkout-card">
-    <h3>Jumlah: <span id="totalPrice">RM 0.00</span></h3>
-
-    <input type="text" name="nama_pelanggan" placeholder="Nama penuh" required>
-
-    <button type="submit" class="btn-teruskan">Teruskan</button>
-</div>
-
+        <input type="text" name="nama_pelanggan" required placeholder="Nama Penuh" class="checkout-input">
+        <button class="checkout-button"> Teruskan </button>
+    </div>
 </form>
+<script src="assets/script.js"></script>
